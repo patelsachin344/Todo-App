@@ -1,36 +1,27 @@
-import { AddTask, Err, GetTask, RemoveTask, UpdatedTask } from "./action";
+import {
+  AddTask,
+  GetTask,
+  GetTaskOne,
+  RemoveTask,
+  UpdatedTask,
+} from "./action";
 
-const intitial = {
+const initialState = {
   task: [],
-  error: false,
+  oneTask: {},
 };
-export const reducer = (state = intitial, action) => {
+
+export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case GetTask: {
-      return {
-        task: action.payload,
-        error: false,
-      };
+      return { ...state, task: action.payload };
     }
-    case Err: {
-      return {
-        error: true,
-        task: [],
-      };
+    case GetTaskOne: {
+      return { ...state, oneTask: action.payload };
     }
-    // case AddTask: {
-    //   return {
-    //     task: action.payload,
-    //   };
-    // }
-    // case UpdatedTask: {
-    //   return {
-    //     task: action.payload,
-    //   };
-    // }
-    // case RemoveTask: {
-    //   return {};
-    // }
+    case AddTask:
+    case UpdatedTask:
+    case RemoveTask:
 
     default: {
       return state;

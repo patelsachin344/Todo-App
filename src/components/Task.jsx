@@ -3,6 +3,7 @@ import {
   Button,
   FormControl,
   FormLabel,
+  HStack,
   Input,
   Modal,
   ModalBody,
@@ -15,22 +16,47 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
-
-export const Task = ({ handleAdd }) => {
-  const [taskName, setTaskName] = useState("");
-  const [status, setStatus] = useState("incomplet");
+import { useDispatch } from "react-redux";
+import { addData } from "../redux/action";
+const initialData = {
+  taskName: "",
+  status: "",
+  priority: "",
+};
+export const Task = () => {
+  const [todo, setTodo] = useState(initialData);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const handler = () => {
-    handleAdd(taskName, status);
-    onClose();
-  };
+  const dispatch = useDispatch();
+
   const initialRef = useRef(null);
   const finalRef = useRef(null);
 
+  const handleChange = (e) => {
+    let { value, name } = e.target;
+    setTodo({ ...todo, [name]: value });
+  };
+  const { taskName, status, priority } = todo;
+
+  const handler = () => {
+    if (!taskName || !status || !priority) {
+      alert("Fill The All Input");
+    } else {
+      dispatch(addData(todo));
+      setTodo({
+        taskName: "",
+        status: "",
+        priority: "",
+      });
+      return onClose();
+    }
+  };
+
   return (
     <Box>
-      <Button onClick={onOpen}>Add Todo</Button>
+      <Button _hover={{ bg: "green" }} bg="skyblue" onClick={onOpen}>
+        Add Todo
+      </Button>
       <Modal
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}
@@ -38,23 +64,32 @@ export const Task = ({ handleAdd }) => {
         onClose={onClose}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg="lightcoral">
           <ModalHeader>Create your Task</ModalHeader>
           <ModalCloseButton />
-          <ModalBody pb={6}>
+          <ModalBody>
             <FormControl mb="1.5rem">
               <FormLabel>Task Name</FormLabel>
               <Input
                 ref={initialRef}
-                placeholder="Task name"
+                placeholder="Task Name"
+                name="taskName"
                 value={taskName}
-                onChange={(e) => setTaskName(e.target.value)}
+                onChange={handleChange}
               />
             </FormControl>
-            <Select value={status} onChange={(e) => setStatus(e.target.value)}>
-              <option value="false">Incomplete</option>
-              <option value="true">Completed</option>
-            </Select>
+            <HStack spacing="5px">
+              <Select name="status" value={status} onChange={handleChange}>
+                <option value="">Select Status</option>
+                <option value="Incomplete">Incomplete</option>
+                <option value="Completed">Completed</option>
+              </Select>
+              <Select name="priority" value={priority} onChange={handleChange}>
+                <option value="">Select Priority</option>
+                <option value="Low Priority">Low Priority</option>
+                <option value="High Priority">High Priority</option>
+              </Select>
+            </HStack>
           </ModalBody>
 
           <ModalFooter>

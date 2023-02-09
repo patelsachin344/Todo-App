@@ -9,73 +9,52 @@ import {
   Select,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { animations } from "framer-motion";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getData } from "../redux/action";
+import { deleteData, getData } from "../redux/action";
 import { Task } from "./Task";
 import { TaskUpdater } from "./TaskUpdater";
 
 export const Todo = () => {
-  const [todo, setTodo] = useState([]);
-
-  const { error, task } = useSelector((state) => state);
-  console.log(task);
+  const { task } = useSelector((state) => state);
   const dispatch = useDispatch();
-  let url = "http://localhost:3000/data";
+
   useEffect(() => {
     dispatch(getData());
   }, []);
 
-  const handleAdd = (taskName, status) => {
-    const data = {
-      id: new Date() + Math.random(),
-      title: taskName,
-      status: status,
-    };
-    setTodo([...todo, data]);
-  };
-
-  console.log(todo);
-  // const updatedTask = "";
-  // const handleEdit = (id) => {
-  //   console.log(updatedTask, id);
-  // };
-  // console.log(updatedTask);
   const handleDelete = (id) => {
-    const data = todo.filter((item) => item.id !== id);
-    setTodo(data);
+    dispatch(deleteData(id));
   };
   return (
-    <Box w="60%" m="auto">
-      <Box textAlign="center" fontSize="3rem" fontWeight="extrabold" m="3rem">
+    <Box>
+      <Box textAlign="center" fontSize="3rem" fontWeight="extrabold">
         Todolist
       </Box>
+      <hr style={{ margin: "1em", border: "1px solid black" }} />
       <Flex justifyContent="space-around">
-        <Task handleAdd={handleAdd} />
+        <Task />
         <Select w="20%">
           <option value="">All</option>
           <option value="">Completed</option>
           <option value="">Incomplete</option>
         </Select>
       </Flex>
-      {task.length === 0 ? (
+      {!task ? (
         <Card p="1rem" m="1rem" fontSize="2rem">
           You have no task
         </Card>
       ) : (
-        <SimpleGrid
-          m="1rem"
-          spacing={4}
-          templateColumns="repeat(auto-fill, minmax(200px, 1fr))"
-        >
+        <SimpleGrid m="1rem" spacing="5%" columns={[1, 2, 4]}>
           {task.map((item) => (
-            <Card key={item.task}>
+            <Card key={item.id} bg="lightsteelblue" p="1rem">
               <CardHeader>
                 <Flex justifyContent="space-between">
-                  <Heading size="md">{item.title}</Heading>
+                  <Heading size="md">{item.taskName}</Heading>
 
                   <Box onClick={() => !item.status}>
-                    {item.status === true ? (
+                    {item.priority === "Low Priority" ? (
                       <Box
                         h="1.5rem"
                         w="1.5rem"
@@ -96,8 +75,13 @@ export const Todo = () => {
                 </Flex>
               </CardHeader>
               <CardFooter display="flex" justifyContent="space-around">
-                <Button onClick={() => handleDelete(item.id)}>Delete</Button>
-                <TaskUpdater todo={todo} />
+                <Button
+                  _hover={{ color: "white", bg: "red" }}
+                  onClick={() => handleDelete(item.id)}
+                >
+                  Delete
+                </Button>
+                <TaskUpdater id={item.id} />
               </CardFooter>
             </Card>
           ))}
