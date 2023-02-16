@@ -5,6 +5,8 @@ export const AddTask = "AddTask";
 export const RemoveTask = "RemoveTask";
 export const Err = "Err";
 
+const url = `http://localhost:5000`;
+
 export const addTask = () => {
   return {
     type: AddTask,
@@ -41,18 +43,18 @@ export const geterr = () => {
 };
 
 export const getData = () => (dispatch) => {
-  fetch("http://localhost:4000/data")
+  fetch(`${url}`)
     .then((res) => res.json())
-    .then((data) => dispatch(getTask(data)))
+    .then((data) => dispatch(getTask(data.task)))
     .catch((err) => dispatch(geterr(err)));
 };
 
 export const getDataOne = (id) => (dispatch) => {
   try {
-    fetch(`http://localhost:4000/data/${id}`)
+    fetch(`${url}/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        dispatch(getTaskOne(data));
+        dispatch(getTaskOne(data.task));
       });
   } catch (error) {
     dispatch(geterr(error));
@@ -62,7 +64,7 @@ export const getDataOne = (id) => (dispatch) => {
 export const addData = (body) => (dispatch) => {
   console.log(body, "action");
   try {
-    fetch("http://localhost:4000/data", {
+    fetch(`${url}`, {
       method: "POST",
       body: JSON.stringify(body),
       headers: {
@@ -79,7 +81,7 @@ export const addData = (body) => (dispatch) => {
 
 export const updateData = (body, id) => (dispatch) => {
   try {
-    fetch(`http://localhost:4000/data/${id}`, {
+    fetch(`${url}/${id}`, {
       method: "PATCH",
       body: JSON.stringify(body),
       headers: {
@@ -95,7 +97,7 @@ export const updateData = (body, id) => (dispatch) => {
 };
 export const deleteData = (id) => (dispatch) => {
   try {
-    fetch(`http://localhost:4000/data/${id}`, {
+    fetch(`${url}/${id}`, {
       method: "DELETE",
     }).then((res) => {
       dispatch(removeTask());

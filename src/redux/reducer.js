@@ -1,5 +1,6 @@
 import {
   AddTask,
+  Err,
   GetTask,
   GetTaskOne,
   RemoveTask,
@@ -9,6 +10,7 @@ import {
 const initialState = {
   task: [],
   oneTask: {},
+  err: "",
 };
 
 export const reducer = (state = initialState, action) => {
@@ -22,6 +24,9 @@ export const reducer = (state = initialState, action) => {
     case AddTask:
     case UpdatedTask:
     case RemoveTask:
+    case Err: {
+      return { ...state, err: action.payload };
+    }
 
     default: {
       return state;

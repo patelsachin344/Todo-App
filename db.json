@@ -3,7 +3,7 @@
     {
       "taskName": "Eat",
       "status": "Incomplete",
-      "priority": "High Priority",
+      "priority": "Low Priority",
       "id": 1
     },
     {
@@ -25,28 +25,10 @@
       "id": 4
     },
     {
-      "taskName": "1",
+      "taskName": "Drink",
       "status": "Incomplete",
-      "priority": "Low Priority",
-      "id": 5
-    },
-    {
-      "taskName": "2",
-      "status": "Incomplete",
-      "priority": "Low Priority",
-      "id": 6
-    },
-    {
-      "taskName": "3",
-      "status": "Incomplete",
-      "priority": "Low Priority",
-      "id": 7
-    },
-    {
-      "taskName": "4",
-      "status": "Completed",
       "priority": "High Priority",
-      "id": 8
+      "id": 5
     }
   ]
 }

@@ -43,9 +43,9 @@ export const TaskUpdater = ({ id }) => {
     setTodo(oneTask);
   }, [oneTask]);
 
-  console.log(oneTask, dataId);
+  // console.log(oneTask, dataId);
 
-  console.log(todo, "todoooooooooooo");
+  // console.log(todo, "todoooooooooooo");
 
   const handleIDOpen = () => {
     if (id) {

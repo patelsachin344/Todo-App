@@ -9,7 +9,6 @@ import {
   Select,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { animations } from "framer-motion";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteData, getData } from "../redux/action";
@@ -17,7 +16,7 @@ import { Task } from "./Task";
 import { TaskUpdater } from "./TaskUpdater";
 
 export const Todo = () => {
-  const { task } = useSelector((state) => state);
+  const { task, err } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,8 +26,9 @@ export const Todo = () => {
   const handleDelete = (id) => {
     dispatch(deleteData(id));
   };
+  console.log(err);
   return (
-    <Box>
+    <Box border="1px solid red">
       <Box textAlign="center" fontSize="3rem" fontWeight="extrabold">
         Todolist
       </Box>
@@ -41,18 +41,18 @@ export const Todo = () => {
           <option value="">Incomplete</option>
         </Select>
       </Flex>
-      {!task ? (
-        <Card p="1rem" m="1rem" fontSize="2rem">
+      {!task.length ? (
+        <Card p="1rem" m="1rem" fontSize="2rem" textAlign="center">
           You have no task
         </Card>
       ) : (
-        <SimpleGrid m="1rem" spacing="5%" columns={[1, 2, 4]}>
+        <SimpleGrid m="1rem" spacing="5%" columns={[1, 2, 3]}>
           {task.map((item) => (
-            <Card key={item.id} bg="lightsteelblue" p="1rem">
+            <Card key={item._id} bg="lightsteelblue" p="1rem">
               <CardHeader>
                 <Flex justifyContent="space-between">
                   <Heading size="md">{item.taskName}</Heading>
-
+                  <Box>Timer</Box>
                   <Box onClick={() => !item.status}>
                     {item.priority === "Low Priority" ? (
                       <Box
@@ -77,11 +77,11 @@ export const Todo = () => {
               <CardFooter display="flex" justifyContent="space-around">
                 <Button
                   _hover={{ color: "white", bg: "red" }}
-                  onClick={() => handleDelete(item.id)}
+                  onClick={() => handleDelete(item._id)}
                 >
                   Delete
                 </Button>
-                <TaskUpdater id={item.id} />
+                <TaskUpdater id={item._id} />
               </CardFooter>
             </Card>
           ))}
