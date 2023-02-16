@@ -39,11 +39,16 @@ export const removeTask = (id) => {
   };
 };
 export const geterr = () => {
-  return {};
+  return {
+    type: Err,
+  };
 };
 
-export const getData = () => (dispatch) => {
-  fetch(`${url}`)
+// All Requests
+
+export const getData = (sortStatus, sortPriority) => (dispatch) => {
+  console.log(sortPriority, "from request");
+  fetch(`${url}/?sortStatus=${sortStatus}&&sortPriority=${sortPriority}`)
     .then((res) => res.json())
     .then((data) => dispatch(getTask(data.task)))
     .catch((err) => dispatch(geterr(err)));

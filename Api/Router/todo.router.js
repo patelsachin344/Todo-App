@@ -5,13 +5,15 @@ const {
   updateTask,
   getOneTask,
   deleteTask,
+  filterTask,
 } = require("../Controller/todo.controller");
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const task = await getTask();
+    let { sortStatus, sortPriority } = req.query;
+    const task = await getTask(sortStatus, sortPriority);
     res.status(200).send({
       task: task,
       message: "Successfully get tasks",
@@ -22,6 +24,7 @@ router.get("/", async (req, res) => {
     });
   }
 });
+
 router.get("/:id", async (req, res) => {
   try {
     let id = req.params.id;
